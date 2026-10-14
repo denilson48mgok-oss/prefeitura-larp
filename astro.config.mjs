@@ -19,6 +19,7 @@ const isBuild = process.argv.includes("build");
 
 export default defineConfig({
   base: '/prefeitura-larp/',
+  trailingSlash: 'aways',
   vite: {
     plugins: [
       // Tailwind CSS v4: integrado via Vite (não via integração Astro)
