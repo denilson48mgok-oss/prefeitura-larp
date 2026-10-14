@@ -26,7 +26,7 @@ const dataFormatada = formatarData(noticia.data, "longo");
     {
       noticia.foto ? (
         <img
-          src={noticia.foto}
+          src={`${base}${noticia.foto}`}
           alt={`Capa da notícia: ${noticia.titulo}`}
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"

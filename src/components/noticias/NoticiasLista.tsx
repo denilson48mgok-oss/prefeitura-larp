@@ -5,6 +5,7 @@ interface NoticiasListaProps {
   /** Coleção inicial de notícias carregadas pelo Astro em tempo de compilação. */
   noticiasIniciais: Noticia[];
 }
+const base = import.meta.env.BASE_URL; 
 
 /**
  * @component NoticiasLista
@@ -110,14 +111,14 @@ export default function NoticiasLista({ noticiasIniciais }: NoticiasListaProps) 
           {noticiasFiltradas.map((noticia) => (
             <a
               key={noticia.slug}
-              href={`/noticias/${noticia.slug}`}
+              href={`${base}noticias/${noticia.slug}`}
               className="group flex flex-col h-full rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary-DEFAULT)] transition-all duration-200 overflow-hidden transform hover:-translate-y-1 shadow-sm"
             >
               {/* Imagem de Capa */}
               <div className="relative w-full h-48 bg-[var(--color-surface-2)] overflow-hidden border-b border-[var(--color-border)]">
                 {noticia.foto ? (
                   <img
-                    src={noticia.foto}
+                    src={`${base}${noticia.foto}`}
                     alt={noticia.titulo}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
