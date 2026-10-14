@@ -23,7 +23,7 @@ export async function getStaticPaths() {
     params: { slug: item.slug },
   }));
 }
-
+const base = import.meta.env.BASE_URL; 
 const { slug } = Astro.params;
 const item = await getLegislacaoItemBySlug(slug!);
 
@@ -62,9 +62,9 @@ const atosRelacionados = todos
            BREADCRUMB DE NAVEGAÇÃO
       ────────────────────────────────────────── -->
       <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2 flex-wrap">
-        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <a href="${base}" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
         <span>&rsaquo;</span>
-        <a href="/legislacao" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Legislação</a>
+        <a href="${base}legislacao" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Legislação</a>
         <span>&rsaquo;</span>
         <span class="text-[var(--color-text)] font-semibold">{labelTipo} nº {item.numero}</span>
       </nav>
@@ -151,7 +151,7 @@ const atosRelacionados = todos
            BOTÃO DE RETORNO
       ────────────────────────────────────────── -->
       <div class="flex items-center justify-between pt-4">
-        <Button href="/legislacao" variant="outline" size="sm">
+        <Button href="${base}legislacao" variant="outline" size="sm">
           &larr; Voltar ao repositório de legislação
         </Button>
       </div>

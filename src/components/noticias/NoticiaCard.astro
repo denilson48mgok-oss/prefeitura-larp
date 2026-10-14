@@ -15,7 +15,7 @@ interface Props {
   /** Objeto de notícia contendo slug, título, data, ementa e foto opcional. */
   noticia: Noticia;
 }
-
+const base = import.meta.env.BASE_URL; 
 const { noticia } = Astro.props;
 const dataFormatada = formatarData(noticia.data, "longo");
 ---

@@ -18,6 +18,10 @@ import keystatic from "@keystatic/astro";
 const isBuild = process.argv.includes("build");
 
 export default defineConfig({
+  site: 'https://denilson48mgok-oss.github.io',
+  base: '/prefeitura-larp',
+  trailingSlash: 'always',
+  output: 'static',
   vite: {
     plugins: [
       // Tailwind CSS v4: integrado via Vite (não via integração Astro)

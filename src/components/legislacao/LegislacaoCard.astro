@@ -22,7 +22,7 @@ interface Props {
 
 const { item } = Astro.props;
 const dataFormatada = formatarData(item.data, "curto");
-
+const base = import.meta.env.BASE_URL; 
 const badgeVariant =
   item.tipo === "portaria"
     ? "primary"

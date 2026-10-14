@@ -14,7 +14,7 @@ import NoticiaCard from "@/components/noticias/NoticiaCard.astro";
 import LegislacaoCard from "@/components/legislacao/LegislacaoCard.astro";
 import Button from "@/components/ui/Button.astro";
 import { getNoticias, getLegislacaoRecente } from "@/lib/content";
-
+const base = import.meta.env.BASE_URL; 
 // Busca os dados diretamente do Keystatic Reader
 const todasNoticias = await getNoticias();
 const ultimasNoticias = todasNoticias.slice(0, 3);
@@ -48,10 +48,10 @@ const atosRecentes = await getLegislacaoRecente(4);
 
       <!-- Atalhos de Ação Rápida -->
       <div class="flex items-center gap-4 flex-wrap pt-2">
-        <Button href="/legislacao" variant="primary" size="md">
+        <Button href="${base}legislacao" variant="primary" size="md">
           📜 Consultar Legislação Municipal
         </Button>
-        <Button href="/noticias" variant="outline" size="md">
+        <Button href="${base}noticias" variant="outline" size="md">
           📰 Acessar Notícias Oficiais
         </Button>
       </div>
@@ -68,7 +68,7 @@ const atosRecentes = await getLegislacaoRecente(4);
           <h2 class="section__title">Notícias em Destaque</h2>
           <p class="section__subtitle">Acompanhe as ações, projetos e acontecimentos oficiais do município.</p>
         </div>
-        <Button href="/noticias" variant="ghost" size="sm">
+        <Button href="${base}noticias" variant="ghost" size="sm">
           Ver todas as notícias &rarr;
         </Button>
       </div>
@@ -84,7 +84,7 @@ const atosRecentes = await getLegislacaoRecente(4);
           <div class="p-8 text-center bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg space-y-3">
             <span class="text-3xl">📭</span>
             <p class="text-sm text-[var(--color-text-muted)]">Nenhuma notícia publicada até o momento.</p>
-            <Button href="/keystatic" variant="primary" size="sm">
+            <Button href="${base}keystatic" variant="primary" size="sm">
               Cadastrar primeira notícia no CMS
             </Button>
           </div>
@@ -103,7 +103,7 @@ const atosRecentes = await getLegislacaoRecente(4);
           <h2 class="section__title">Atos Oficiais Recentes</h2>
           <p class="section__subtitle">Últimas Portarias, Decretos e Leis publicadas pelo Poder Executivo Municipal.</p>
         </div>
-        <Button href="/legislacao" variant="ghost" size="sm">
+        <Button href="${base}legislacao" variant="ghost" size="sm">
           Buscar no repositório de leis &rarr;
         </Button>
       </div>
@@ -119,7 +119,7 @@ const atosRecentes = await getLegislacaoRecente(4);
           <div class="p-8 text-center bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg space-y-3">
             <span class="text-3xl">📂</span>
             <p class="text-sm text-[var(--color-text-muted)]">Nenhum ato oficial cadastrado até o momento.</p>
-            <Button href="/keystatic" variant="primary" size="sm">
+            <Button href="${base}keystatic" variant="primary" size="sm">
               Cadastrar ato oficial no CMS
             </Button>
           </div>
@@ -145,7 +145,7 @@ const atosRecentes = await getLegislacaoRecente(4);
           <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
             Consulte as publicações diárias de atos administrativos, convocações e balanços financeiros.
           </p>
-          <a href="/legislacao" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
+          <a href="${base}legislacao" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
             Consultar publicações &rarr;
           </a>
         </div>
@@ -167,7 +167,7 @@ const atosRecentes = await getLegislacaoRecente(4);
           <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
             Ambiente de gestão de conteúdo restrito com controle de autenticação via repositório.
           </p>
-          <a href="/keystatic" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
+          <a href="${base}keystatic" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
             Acessar painel Keystatic &rarr;
           </a>
         </div>

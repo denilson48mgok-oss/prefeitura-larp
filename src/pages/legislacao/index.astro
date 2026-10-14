@@ -10,7 +10,7 @@
 import BaseLayout from "@/components/layout/BaseLayout.astro";
 import LegislacaoFiltro from "@/components/legislacao/LegislacaoFiltro";
 import { getLegislacao } from "@/lib/content";
-
+const base = import.meta.env.BASE_URL; 
 const todosAtos = await getLegislacao();
 ---
 
@@ -23,7 +23,7 @@ const todosAtos = await getLegislacao();
     <div class="container space-y-3">
       <!-- Breadcrumb de Navegação -->
       <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2">
-        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <a href="${base}" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
         <span>&rsaquo;</span>
         <span class="text-[var(--color-text)] font-semibold">Legislação Municipal</span>
       </nav>

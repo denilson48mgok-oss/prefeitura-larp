@@ -9,7 +9,7 @@
  * @example
  * ```astro
  * <!-- Como link -->
- * <Button href="/noticias">Ver todas as notícias</Button>
+ * <Button href="${base}noticias">Ver todas as notícias</Button>
  *
  * <!-- Como botão de ação -->
  * <Button variant="outline" size="sm" type="submit">Buscar</Button>
@@ -18,7 +18,7 @@
  * <Button variant="secondary" disabled>Indisponível</Button>
  * ```
  */
-
+const base = import.meta.env.BASE_URL; 
 interface Props {
   /** Variante visual. Default: "primary". */
   variant?: "primary" | "secondary" | "outline" | "ghost";

@@ -17,12 +17,12 @@
  * </Card>
  *
  * <!-- Card clicável (renderiza como <a>) -->
- * <Card variant="interactive" href="/noticias/minha-noticia">
+ * <Card variant="interactive" href="${base}noticias/minha-noticia">
  *   <h2>Título</h2>
  * </Card>
  * ```
  */
-
+const base = import.meta.env.BASE_URL; 
 interface Props {
   /** "default": container estático. "interactive": hover animado + cursor pointer. */
   variant?: "default" | "interactive";
