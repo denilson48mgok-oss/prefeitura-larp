@@ -36,6 +36,7 @@ export default defineConfig({
     // Keystatic CMS: ativado durante o desenvolvimento para permitir a edição
     // e cadastro via interface gráfica local. Durante o build estático (SSG),
     // o site é compilado como HTML puro para distribuição no GitHub Pages.
-    ...(!isBuild ? [keystatic()] : []),
+    // ...(!isBuild ? [keystatic()] : []),
+    keystatic() // sempre ativado, mesmo no build, para permitir a exportação de dados do CMS
   ],
 });
