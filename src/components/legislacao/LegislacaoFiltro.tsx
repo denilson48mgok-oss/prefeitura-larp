@@ -6,6 +6,8 @@ interface LegislacaoFiltroProps {
   itensIniciais: ItemLegislacao[];
 }
 
+const base = import.meta.env.BASE_URL; 
+
 /**
  * Mapeamento de rótulos e estilos de badge para os tipos de documentos.
  */
@@ -283,7 +285,7 @@ export default function LegislacaoFiltro({ itensIniciais }: LegislacaoFiltroProp
                 <div className="pt-2 flex items-center justify-between gap-3 flex-wrap text-xs">
                   {item.arquivo ? (
                     <a
-                      href={item.arquivo}
+                      href={`${base}${item.arquivo}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       download
@@ -298,7 +300,7 @@ export default function LegislacaoFiltro({ itensIniciais }: LegislacaoFiltroProp
                   )}
 
                   <a
-                    href={`/legislacao/${item.slug}`}
+                    href={`${base}legislacao/${item.slug}`}
                     className="font-bold text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors ml-auto"
                   >
                     Visualizar ficha do ato &rarr;
