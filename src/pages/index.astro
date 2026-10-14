@@ -1,0 +1,177 @@
+---
+/**
+ * @page Homepage (Página Inicial)
+ * @description Ponto de entrada do portal oficial da Prefeitura LARP.
+ *
+ * Integra dinamicamente os conteúdos gerenciados via Keystatic:
+ * - Últimas Notícias publicadas em ordem cronológica reversa.
+ * - Atos Oficiais recentes (Portarias, Decretos e Leis) com links para download de anexos.
+ * - Atalhos estratégicos para os serviços e transparência pública municipal.
+ */
+
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import NoticiaCard from "@/components/noticias/NoticiaCard.astro";
+import LegislacaoCard from "@/components/legislacao/LegislacaoCard.astro";
+import Button from "@/components/ui/Button.astro";
+import { getNoticias, getLegislacaoRecente } from "@/lib/content";
+
+// Busca os dados diretamente do Keystatic Reader
+const todasNoticias = await getNoticias();
+const ultimasNoticias = todasNoticias.slice(0, 3);
+const atosRecentes = await getLegislacaoRecente(4);
+---
+
+<BaseLayout
+  title="Início"
+  description="Portal Oficial da Prefeitura Municipal de LARP (Nova Arcádia). Acompanhe notícias oficiais, portarias, decretos e leis municipais."
+>
+  <!-- ──────────────────────────────────────────
+       HERO INSTITUCIONAL
+  ────────────────────────────────────────── -->
+  <section class="relative bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-base)] border-b border-[var(--color-border)] py-16 md:py-20">
+    <div class="container space-y-8">
+      <div class="max-w-3xl space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-surface-2)] border border-[var(--color-border)] text-xs text-[var(--color-primary-light)] font-semibold">
+          <span class="w-2 h-2 rounded-full bg-[var(--color-primary-DEFAULT)] animate-pulse"></span>
+          Governo Municipal de Nova Arcádia
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-black text-[var(--color-text)] tracking-tight leading-tight">
+          Transparência, Cidadania e <span class="text-[var(--color-primary-DEFAULT)]">Gestão Pública</span>
+        </h1>
+
+        <p class="md:text-lg text-[var(--color-text)] leading-relaxed">
+          Bem-vindo ao canal oficial de comunicação da Prefeitura LARP. Consulte leis em vigor,
+          decretos executivos, portarias administrativas e as principais coberturas de ações municipais.
+        </p>
+      </div>
+
+      <!-- Atalhos de Ação Rápida -->
+      <div class="flex items-center gap-4 flex-wrap pt-2">
+        <Button href="/legislacao" variant="primary" size="md">
+          📜 Consultar Legislação Municipal
+        </Button>
+        <Button href="/noticias" variant="outline" size="md">
+          📰 Acessar Notícias Oficiais
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO: ÚLTIMAS NOTÍCIAS
+  ────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container space-y-8">
+      <div class="flex items-end justify-between gap-4 flex-wrap border-b border-[var(--color-border)] pb-4">
+        <div>
+          <h2 class="section__title">Notícias em Destaque</h2>
+          <p class="section__subtitle">Acompanhe as ações, projetos e acontecimentos oficiais do município.</p>
+        </div>
+        <Button href="/noticias" variant="ghost" size="sm">
+          Ver todas as notícias &rarr;
+        </Button>
+      </div>
+
+      {
+        ultimasNoticias.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ultimasNoticias.map((noticia) => (
+              <NoticiaCard noticia={noticia} />
+            ))}
+          </div>
+        ) : (
+          <div class="p-8 text-center bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg space-y-3">
+            <span class="text-3xl">📭</span>
+            <p class="text-sm text-[var(--color-text-muted)]">Nenhuma notícia publicada até o momento.</p>
+            <Button href="/keystatic" variant="primary" size="sm">
+              Cadastrar primeira notícia no CMS
+            </Button>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO: ATOS OFICIAIS E LEGISLAÇÃO RECENTE
+  ────────────────────────────────────────── -->
+  <section class="section bg-[var(--color-surface)] border-y border-[var(--color-border)]">
+    <div class="container space-y-8">
+      <div class="flex items-end justify-between gap-4 flex-wrap border-b border-[var(--color-border)] pb-4">
+        <div>
+          <h2 class="section__title">Atos Oficiais Recentes</h2>
+          <p class="section__subtitle">Últimas Portarias, Decretos e Leis publicadas pelo Poder Executivo Municipal.</p>
+        </div>
+        <Button href="/legislacao" variant="ghost" size="sm">
+          Buscar no repositório de leis &rarr;
+        </Button>
+      </div>
+
+      {
+        atosRecentes.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {atosRecentes.map((item) => (
+              <LegislacaoCard item={item} />
+            ))}
+          </div>
+        ) : (
+          <div class="p-8 text-center bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg space-y-3">
+            <span class="text-3xl">📂</span>
+            <p class="text-sm text-[var(--color-text-muted)]">Nenhum ato oficial cadastrado até o momento.</p>
+            <Button href="/keystatic" variant="primary" size="sm">
+              Cadastrar ato oficial no CMS
+            </Button>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO: SERVIÇOS & TRANSPARÊNCIA PÚBLICA
+  ────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container space-y-8">
+      <div>
+        <h2 class="section__title">Serviços ao Cidadão</h2>
+        <p class="section__subtitle">Acesso direto aos canais de atendimento e instrumentos de transparência.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] space-y-3">
+          <div class="text-2xl">🏛️</div>
+          <h3 class="font-bold text-[var(--color-text)]">Diário Oficial do Município</h3>
+          <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+            Consulte as publicações diárias de atos administrativos, convocações e balanços financeiros.
+          </p>
+          <a href="/legislacao" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
+            Consultar publicações &rarr;
+          </a>
+        </div>
+
+        <div class="p-6 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] space-y-3">
+          <div class="text-2xl">🔍</div>
+          <h3 class="font-bold text-[var(--color-text)]">Portal da Transparência</h3>
+          <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+            Acompanhe a aplicação de receitas públicas, licitações, contratos e despesas de pessoal.
+          </p>
+          <a href="#" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
+            Acessar prestação de contas &rarr;
+          </a>
+        </div>
+
+        <div class="p-6 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] space-y-3">
+          <div class="text-2xl">🛡️</div>
+          <h3 class="font-bold text-[var(--color-text)]">Área do Servidor & CMS</h3>
+          <p class="text-xs text-[var(--color-text-muted)] leading-relaxed">
+            Ambiente de gestão de conteúdo restrito com controle de autenticação via repositório.
+          </p>
+          <a href="/keystatic" class="inline-block text-xs font-bold text-[var(--color-primary-DEFAULT)] hover:underline">
+            Acessar painel Keystatic &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

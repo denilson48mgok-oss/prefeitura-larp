@@ -1,0 +1,31 @@
+---
+/**
+ * @component Badge
+ * @description Etiqueta visual compacta para categorização de conteúdo.
+ *
+ * Usada principalmente para indicar o tipo de documento legislativo
+ * (Portaria, Decreto, Lei) nos cards e páginas de listagem.
+ *
+ * @example
+ * ```astro
+ * <Badge variant="primary">Portaria</Badge>
+ * <Badge variant="secondary" size="sm">Decreto</Badge>
+ * <Badge variant="neutral">Lei</Badge>
+ * ```
+ */
+
+interface Props {
+  /** Variante de cor da badge. Determina a paleta visual. */
+  variant?: "primary" | "secondary" | "neutral";
+  /** Tamanho da badge. */
+  size?: "sm" | "md";
+  /** Classes CSS adicionais para customização pontual. */
+  class?: string;
+}
+
+const { variant = "neutral", size = "md", class: className } = Astro.props;
+---
+
+<span class:list={["badge", `badge--${variant}`, `badge--${size}`, className]}>
+  <slot />
+</span>

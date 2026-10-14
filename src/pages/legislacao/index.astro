@@ -1,0 +1,47 @@
+---
+/**
+ * @page Legislação Municipal (/legislacao)
+ * @description Repositório oficial de Portarias, Decretos e Leis da Prefeitura de LARP.
+ *
+ * Fornece filtros instantâneos por tipo (portaria, decreto, lei), período e
+ * busca textual por número ou ementa, além de download dos arquivos em PDF/DOCX.
+ */
+
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import LegislacaoFiltro from "@/components/legislacao/LegislacaoFiltro";
+import { getLegislacao } from "@/lib/content";
+
+const todosAtos = await getLegislacao();
+---
+
+<BaseLayout
+  title="Legislação Municipal"
+  description="Repositório oficial de Portarias, Decretos e Leis Municipais da Prefeitura Municipal de LARP (Nova Arcádia). Consulta pública e download de atos."
+>
+  <!-- Cabeçalho da Seção -->
+  <div class="py-10 border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+    <div class="container space-y-3">
+      <!-- Breadcrumb de Navegação -->
+      <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2">
+        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <span>&rsaquo;</span>
+        <span class="text-[var(--color-text)] font-semibold">Legislação Municipal</span>
+      </nav>
+
+      <h1 class="text-3xl font-black text-[var(--color-text)]">
+        Atos Normativos e Legislação Municipal
+      </h1>
+      <p class="text-sm text-[var(--color-text-muted)] max-w-2xl leading-relaxed">
+        Consulte na íntegra os decretos, portarias e leis sancionadas no Município de Nova Arcádia.
+        Pesquise por numeração oficial, palavras-chave da ementa ou filtre por data de publicação.
+      </p>
+    </div>
+  </div>
+
+  <!-- Mecanismo de Busca e Lista -->
+  <section class="section">
+    <div class="container">
+      <LegislacaoFiltro client:load itensIniciais={todosAtos} />
+    </div>
+  </section>
+</BaseLayout>

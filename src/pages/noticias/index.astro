@@ -1,0 +1,45 @@
+---
+/**
+ * @page Listagem de Notícias (/noticias)
+ * @description Repositório de comunicados, matérias e informes da Prefeitura Municipal de LARP.
+ *
+ * Possui integração com o Keystatic para geração estática (SSG) de todas as notícias
+ * com filtro instantâneo por texto no cliente.
+ */
+
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import NoticiasLista from "@/components/noticias/NoticiasLista";
+import { getNoticias } from "@/lib/content";
+
+const noticias = await getNoticias();
+---
+
+<BaseLayout
+  title="Notícias Oficiais"
+  description="Acompanhe todas as matérias, pronunciamentos e atualizações da Prefeitura Municipal de LARP."
+>
+  <div class="py-10 border-b border-[var(--color-border)] bg-[var(--color-surface)]">
+    <div class="container space-y-3">
+      <!-- Breadcrumb de Navegação -->
+      <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2">
+        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <span>&rsaquo;</span>
+        <span class="text-[var(--color-text)] font-semibold">Notícias</span>
+      </nav>
+
+      <h1 class="text-3xl font-black text-[var(--color-text)]">
+        Central de Notícias Oficiais
+      </h1>
+      <p class="text-sm text-[var(--color-text-muted)] max-w-2xl">
+        Informações transparentes e atualizadas da administração municipal de Nova Arcádia.
+        Consulte matérias jornalísticas e avisos de utilidade pública.
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <NoticiasLista client:load noticiasIniciais={noticias} />
+    </div>
+  </section>
+</BaseLayout>

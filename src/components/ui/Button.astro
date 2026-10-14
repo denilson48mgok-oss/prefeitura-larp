@@ -1,0 +1,65 @@
+---
+/**
+ * @component Button
+ * @description Botão reutilizável com múltiplas variantes e tamanhos.
+ *
+ * Renderiza como `<a>` quando `href` é fornecido (link semântico),
+ * ou como `<button>` quando usado para ações (submit, onClick, etc.).
+ *
+ * @example
+ * ```astro
+ * <!-- Como link -->
+ * <Button href="/noticias">Ver todas as notícias</Button>
+ *
+ * <!-- Como botão de ação -->
+ * <Button variant="outline" size="sm" type="submit">Buscar</Button>
+ *
+ * <!-- Botão secundário desabilitado -->
+ * <Button variant="secondary" disabled>Indisponível</Button>
+ * ```
+ */
+
+interface Props {
+  /** Variante visual. Default: "primary". */
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  /** Tamanho do botão. Default: "md". */
+  size?: "sm" | "md" | "lg";
+  /**
+   * URL de destino. Quando fornecido, o componente renderiza como `<a>`.
+   * Quando ausente, renderiza como `<button>`.
+   */
+  href?: string;
+  /** Tipo do elemento `<button>`. Ignorado quando `href` é fornecido. */
+  type?: "button" | "submit" | "reset";
+  /** Desabilita a interação e aplica estilo de opacidade reduzida. */
+  disabled?: boolean;
+  /** Classes CSS adicionais. */
+  class?: string;
+}
+
+const {
+  variant = "primary",
+  size = "md",
+  href,
+  type = "button",
+  disabled = false,
+  class: className,
+} = Astro.props;
+
+/** Classes compostas do botão. */
+const classes = ["btn", `btn--${variant}`, `btn--${size}`, className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+{
+  href ? (
+    <a href={href} class={classes}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} disabled={disabled} class={classes}>
+      <slot />
+    </button>
+  )
+}

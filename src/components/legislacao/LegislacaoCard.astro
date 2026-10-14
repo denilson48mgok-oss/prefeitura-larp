@@ -1,0 +1,87 @@
+---
+/**
+ * @component LegislacaoCard
+ * @description Card para exibição de atos oficiais (Portaria, Decreto ou Lei).
+ *
+ * Apresenta o tipo com Badge visual correspondente, o número do ato com formatação
+ * institucional, a data de publicação, a ementa completa e atalho para download do arquivo.
+ */
+
+import Card from "@/components/ui/Card.astro";
+import Badge from "@/components/ui/Badge.astro";
+import { formatarData } from "@/lib/utils";
+import {
+  type ItemLegislacao,
+  LABEL_TIPO_LEGISLACAO,
+} from "@/lib/types";
+
+interface Props {
+  /** Registro do ato oficial contendo número, tipo, data, ementa e link de arquivo. */
+  item: ItemLegislacao;
+}
+
+const { item } = Astro.props;
+const dataFormatada = formatarData(item.data, "curto");
+
+const badgeVariant =
+  item.tipo === "portaria"
+    ? "primary"
+    : item.tipo === "decreto"
+      ? "secondary"
+      : "neutral";
+---
+
+<Card class="p-5 flex flex-col justify-between h-full space-y-4 hover:border-[var(--color-primary-DEFAULT)] transition-colors">
+  <div class="space-y-3">
+    <!-- Cabeçalho do Card: Badge do Tipo + Data -->
+    <div class="flex items-center justify-between gap-2 flex-wrap">
+      <Badge variant={badgeVariant} size="sm">
+        {LABEL_TIPO_LEGISLACAO[item.tipo]}
+      </Badge>
+      <time datetime={item.data} class="text-xs text-[var(--color-text-muted)] font-mono">
+        Publicado em: {dataFormatada}
+      </time>
+    </div>
+
+    <!-- Identificação e Número -->
+    <div>
+      <h3 class="font-bold text-[var(--color-text)] flex items-baseline gap-2">
+        <span class="capitalize">{item.tipo}</span>
+        <span class="text-[var(--color-primary-DEFAULT)]">nº {item.numero}</span>
+      </h3>
+    </div>
+
+    <!-- Ementa / Descrição do Assunto -->
+    <p class="text-xs text-[var(--color-text)] leading-relaxed line-clamp-3">
+      {item.ementa}
+    </p>
+  </div>
+
+  <!-- Ações: Download do Arquivo ou Detalhes -->
+  <div class="pt-2 border-t border-[var(--color-border)] flex items-center justify-between gap-2">
+    {
+      item.arquivo ? (
+        <a
+          href={item.arquivo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-primary-DEFAULT)] hover:text-[var(--color-primary-light)] transition-colors"
+          download
+        >
+          <span>📥 Baixar Documento Oficial</span>
+        </a>
+      ) : (
+        <span class="text-xs text-[var(--color-muted)] italic">
+          Documento digitalizado indisponível
+        </span>
+      )
+    }
+
+    <a
+      href={`/legislacao/${item.slug}`}
+      class="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
+    >
+      Ver detalhes &rarr;
+    </a>
+  </div>
+</Card>

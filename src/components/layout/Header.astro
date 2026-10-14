@@ -1,0 +1,81 @@
+---
+/**
+ * @component Header
+ * @description Cabeçalho institucional do site da Prefeitura LARP.
+ *
+ * Composto por duas faixas:
+ * 1. `gov-bar` — Barra superior fina com identificação oficial e link de acesso
+ *    restrito ao painel do CMS (Keystatic).
+ * 2. `main-header` — Header principal com logo e navegação. Fica fixo no topo
+ *    da janela (sticky) durante o scroll.
+ *
+ * A detecção da rota ativa usa `Astro.url.pathname` para marcar o link
+ * correspondente com a classe `nav-link--active`.
+ */
+
+/** Links de navegação principal. */
+const navLinks: Array<{ label: string; href: string }> = [
+  { label: "Início",      href: "/"           },
+  { label: "Notícias",    href: "/noticias"   },
+  { label: "Legislação",  href: "/legislacao" },
+];
+
+const currentPath = Astro.url.pathname;
+
+/**
+ * Determina se um link de navegação está ativo.
+ * A rota raiz "/" usa comparação exata para evitar marcar todas as páginas.
+ *
+ * @param href - URL do link de navegação.
+ * @param current - Pathname atual da página.
+ * @returns `true` se o link corresponde à rota atual.
+ */
+function isActive(href: string, current: string): boolean {
+  if (href === "/") return current === "/";
+  return current.startsWith(href);
+}
+---
+
+<header>
+  <!-- Barra gov: identificação oficial + link admin -->
+  <div class="gov-bar">
+    <div class="container">
+      <span>🇧🇷 Portal Oficial &mdash; Prefeitura Municipal de LARP</span>
+      <a href="/keystatic" aria-label="Acessar painel de administração">
+        Área Restrita
+      </a>
+    </div>
+  </div>
+
+  <!-- Header principal: logo + nav -->
+  <div class="main-header">
+    <div class="container">
+
+      <!-- Logo institucional -->
+      <a href="/" class="site-logo" aria-label="Prefeitura Municipal de LARP — Página inicial">
+        <div class="site-logo__icon" aria-hidden="true">🏛️</div>
+        <div class="site-logo__text">
+          <span class="site-logo__pre">Prefeitura Municipal de</span>
+          <span class="site-logo__name">LARP</span>
+        </div>
+      </a>
+
+      <!-- Navegação principal -->
+      <nav class="site-nav" aria-label="Navegação principal">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "nav-link",
+              isActive(link.href, currentPath) && "nav-link--active",
+            ]}
+            aria-current={isActive(link.href, currentPath) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+    </div>
+  </div>
+</header>

@@ -1,0 +1,188 @@
+---
+/**
+ * @page Ficha Detalhada do Ato Normativo (/legislacao/[slug])
+ * @description Exibe a ficha completa de uma Portaria, Decreto ou Lei Municipal.
+ *
+ * Apresenta metadados oficiais, ementa na íntegra, painel de autenticidade/download
+ * do documento digitalizado (PDF/DOCX) e atos correlatos da mesma categoria.
+ */
+
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import Badge from "@/components/ui/Badge.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLegislacao, getLegislacaoItemBySlug } from "@/lib/content";
+import { formatarData } from "@/lib/utils";
+import {
+  LABEL_TIPO_LEGISLACAO,
+  type TipoLegislacao,
+} from "@/lib/types";
+
+export async function getStaticPaths() {
+  const todos = await getLegislacao();
+  return todos.map((item) => ({
+    params: { slug: item.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const item = await getLegislacaoItemBySlug(slug!);
+
+if (!item) {
+  return Astro.redirect("/legislacao");
+}
+
+const dataFormatada = formatarData(item.data, "longo");
+const labelTipo = LABEL_TIPO_LEGISLACAO[item.tipo];
+
+const badgeVariant =
+  item.tipo === "portaria"
+    ? "primary"
+    : item.tipo === "decreto"
+      ? "secondary"
+      : "neutral";
+
+const extensaoArquivo = item.arquivo
+  ? item.arquivo.split(".").pop()?.toUpperCase()
+  : null;
+
+// Busca outros atos da mesma categoria para recomendação
+const todos = await getLegislacao();
+const atosRelacionados = todos
+  .filter((a) => a.tipo === item.tipo && a.slug !== item.slug)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={`${labelTipo} nº ${item.numero}`}
+  description={item.ementa}
+>
+  <div class="py-10">
+    <div class="container max-w-4xl space-y-8">
+      <!-- ──────────────────────────────────────────
+           BREADCRUMB DE NAVEGAÇÃO
+      ────────────────────────────────────────── -->
+      <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <span>&rsaquo;</span>
+        <a href="/legislacao" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Legislação</a>
+        <span>&rsaquo;</span>
+        <span class="text-[var(--color-text)] font-semibold">{labelTipo} nº {item.numero}</span>
+      </nav>
+
+      <!-- ──────────────────────────────────────────
+           CABEÇALHO DA FICHA NORMATIVA
+      ────────────────────────────────────────── -->
+      <div class="p-6 md:p-8 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] space-y-5">
+        <div class="flex items-center justify-between gap-3 flex-wrap border-b border-[var(--color-border)] pb-4">
+          <Badge variant={badgeVariant} size="md">
+            {labelTipo} Oficial
+          </Badge>
+
+          <time datetime={item.data} class="text-xs font-semibold text-[var(--color-text-muted)]">
+            📅 Publicado em {dataFormatada}
+          </time>
+        </div>
+
+        <div class="space-y-2">
+          <span class="text-xs uppercase font-bold tracking-wider text-[var(--color-primary-DEFAULT)]">
+            Identificação Oficial
+          </span>
+          <h1 class="text-2xl sm:text-4xl font-black text-[var(--color-text)] font-mono">
+            {labelTipo} nº {item.numero}
+          </h1>
+        </div>
+
+        <!-- Ementa Completa -->
+        <div class="space-y-2 pt-2 border-t border-[var(--color-border)]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
+            Ementa / Objeto
+          </span>
+          <div class="p-4 rounded-lg bg-[var(--color-surface-2)] border-l-4 border-[var(--color-primary-DEFAULT)] text-sm leading-relaxed text-[var(--color-text)]">
+            {item.ementa}
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────────
+           PAINEL DE DOWNLOAD DO DOCUMENTO OFICIAL
+      ────────────────────────────────────────── -->
+      <div class="p-6 rounded-xl bg-gradient-to-br from-[var(--color-surface)] to-[var(--color-surface-2)] border border-[var(--color-border)] space-y-4">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div class="space-y-1">
+            <h2 class="font-bold text-[var(--color-text)] flex items-center gap-2">
+              <span>📄</span>
+              <span>Documento Digital Oficial</span>
+            </h2>
+            <p class="text-xs text-[var(--color-text-muted)]">
+              Arquivo original arquivado no repositório municipal com fé pública.
+            </p>
+          </div>
+
+          {
+            item.arquivo ? (
+              <a
+                href={item.arquivo}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                class="btn btn--primary btn--md shadow-md"
+              >
+                <span>📥 Baixar Arquivo Integral ({extensaoArquivo})</span>
+              </a>
+            ) : (
+              <span class="px-4 py-2 rounded-lg bg-[var(--color-surface-2)] text-xs text-[var(--color-muted)] italic border border-[var(--color-border)]">
+                Arquivo digitalizado pendente de upload
+              </span>
+            )
+          }
+        </div>
+
+        {
+          item.arquivo && (
+            <div class="pt-3 border-t border-[var(--color-border)] flex items-center justify-between text-xs text-[var(--color-muted)] flex-wrap gap-2">
+              <span>Formato do arquivo: <strong>{extensaoArquivo}</strong></span>
+              <span>Localização: <code class="text-[10px] text-[var(--color-text-muted)] bg-[var(--color-base)] px-2 py-0.5 rounded">{item.arquivo}</code></span>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- ──────────────────────────────────────────
+           BOTÃO DE RETORNO
+      ────────────────────────────────────────── -->
+      <div class="flex items-center justify-between pt-4">
+        <Button href="/legislacao" variant="outline" size="sm">
+          &larr; Voltar ao repositório de legislação
+        </Button>
+      </div>
+
+      <!-- ──────────────────────────────────────────
+           ATOS RELACIONADOS DA MESMA CATEGORIA
+      ────────────────────────────────────────── -->
+      {
+        atosRelacionados.length > 0 && (
+          <aside class="pt-8 border-t border-[var(--color-border)] space-y-4">
+            <h2 class="text-base font-bold text-[var(--color-text)]">
+              Outras {labelTipo}s recentes no município
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {atosRelacionados.map((rel) => (
+                <a
+                  href={`/legislacao/${rel.slug}`}
+                  class="p-4 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary-DEFAULT)] transition-colors space-y-2 block"
+                >
+                  <span class="text-[10px] font-bold text-[var(--color-primary-DEFAULT)] font-mono">
+                    nº {rel.numero}
+                  </span>
+                  <p class="text-xs text-[var(--color-text-muted)] line-clamp-2">
+                    {rel.ementa}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

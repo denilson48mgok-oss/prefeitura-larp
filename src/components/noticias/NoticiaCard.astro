@@ -1,0 +1,68 @@
+---
+/**
+ * @component NoticiaCard
+ * @description Card de exibição resumida de notícia na listagem e na página inicial.
+ *
+ * Apresenta a imagem de destaque (com fallback elegante com brasão caso a imagem não exista),
+ * a data de publicação formatada, o título com link acessível e a ementa de resumo.
+ */
+
+import Card from "@/components/ui/Card.astro";
+import { formatarData } from "@/lib/utils";
+import type { Noticia } from "@/lib/types";
+
+interface Props {
+  /** Objeto de notícia contendo slug, título, data, ementa e foto opcional. */
+  noticia: Noticia;
+}
+
+const { noticia } = Astro.props;
+const dataFormatada = formatarData(noticia.data, "longo");
+---
+
+<Card variant="interactive" href={`/noticias/${noticia.slug}`} class="flex flex-col h-full group">
+  <!-- Imagem de Destaque / Fallback -->
+  <div class="relative w-full h-48 bg-[var(--color-surface-2)] overflow-hidden border-b border-[var(--color-border)]">
+    {
+      noticia.foto ? (
+        <img
+          src={noticia.foto}
+          alt={`Capa da notícia: ${noticia.titulo}`}
+          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full h-full flex flex-col items-center justify-center text-[var(--color-muted)] bg-gradient-to-br from-[var(--color-surface-2)] to-[var(--color-surface)]">
+          <span class="text-4xl mb-1 opacity-70">📰</span>
+          <span class="text-xs uppercase tracking-wider font-semibold">Prefeitura LARP Informa</span>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Corpo do Card -->
+  <div class="p-5 flex flex-col flex-grow justify-between space-y-3">
+    <div class="space-y-2">
+      <!-- Data -->
+      <time datetime={noticia.data} class="text-xs font-semibold text-[var(--color-primary-DEFAULT)] uppercase tracking-wide">
+        📅 {dataFormatada}
+      </time>
+
+      <!-- Título -->
+      <h3 class="font-bold text-[var(--color-text)] line-clamp-2 group-hover:text-[var(--color-primary-light)] transition-colors">
+        {noticia.titulo}
+      </h3>
+
+      <!-- Resumo / Ementa -->
+      <p class="text-xs text-[var(--color-text-muted)] line-clamp-3 leading-relaxed">
+        {noticia.ementa}
+      </p>
+    </div>
+
+    <!-- Chamada para Ação -->
+    <div class="pt-2 flex items-center text-xs font-bold text-[var(--color-primary-DEFAULT)] group-hover:translate-x-1 transition-transform">
+      <span>Ler notícia na íntegra</span>
+      <span class="ml-1" aria-hidden="true">&rarr;</span>
+    </div>
+  </div>
+</Card>

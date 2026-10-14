@@ -1,0 +1,97 @@
+---
+/**
+ * @component Footer
+ * @description Rodapé institucional do site da Prefeitura LARP.
+ *
+ * Contém três colunas de informação:
+ * 1. Identidade da prefeitura com endereço e contato (dados fictícios).
+ * 2. Links rápidos para as seções principais do site.
+ * 3. Links para transparência e acesso à informação (Lei de Acesso).
+ *
+ * A barra inferior exibe o copyright e o crédito de tecnologia.
+ *
+ * @note Todos os dados institucionais são fictícios (projeto LARP/portfólio).
+ */
+
+const currentYear = new Date().getFullYear();
+
+/** Links rápidos — coluna central do footer. */
+const quickLinks: Array<{ label: string; href: string }> = [
+  { label: "Página Inicial",  href: "/"            },
+  { label: "Notícias",        href: "/noticias"    },
+  { label: "Portarias",       href: "/legislacao"  },
+  { label: "Decretos",        href: "/legislacao"  },
+  { label: "Leis Municipais", href: "/legislacao"  },
+];
+
+/** Links de transparência — coluna direita do footer. */
+const transparencyLinks: Array<{ label: string; href: string }> = [
+  { label: "Portal da Transparência", href: "#" },
+  { label: "Acesso à Informação (LAI)", href: "#" },
+  { label: "Ouvidoria Municipal", href: "#" },
+  { label: "Licitações e Contratos", href: "#" },
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+
+    <!-- Corpo do footer: 3 colunas -->
+    <div class="site-footer__body">
+
+      <!-- Coluna 1: Identidade institucional -->
+      <div>
+        <p class="site-footer__brand-name">🏛️ Prefeitura Municipal de LARP</p>
+        <p class="site-footer__brand-sub">Estado de LARP — CNPJ: 00.000.000/0001-00</p>
+        <address class="site-footer__info" style="font-style: normal;">
+          Rua das Prefeituras, 123 — Centro<br />
+          LARP / LA — CEP 00000-000<br />
+          <br />
+          📞 (00) 0000-0000<br />
+          ✉️ contato@prefeitura.larp.gov.br<br />
+          <br />
+          Horário de atendimento:<br />
+          Segunda a Sexta, 08h às 17h
+        </address>
+      </div>
+
+      <!-- Coluna 2: Links rápidos -->
+      <div>
+        <h3 class="site-footer__col-title">Links Rápidos</h3>
+        <ul class="site-footer__links">
+          {quickLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Coluna 3: Transparência -->
+      <div>
+        <h3 class="site-footer__col-title">Transparência</h3>
+        <ul class="site-footer__links">
+          {transparencyLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Barra inferior: copyright -->
+    <div class="site-footer__bottom">
+      <span>
+        &copy; {currentYear} Prefeitura Municipal de LARP. Todos os direitos reservados.
+      </span>
+      <span>
+        Desenvolvido com <a href="https://astro.build" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-DEFAULT); text-decoration: none;">Astro</a>
+        &amp;
+        <a href="https://keystatic.com" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-DEFAULT); text-decoration: none;">Keystatic</a>
+      </span>
+    </div>
+
+  </div>
+</footer>

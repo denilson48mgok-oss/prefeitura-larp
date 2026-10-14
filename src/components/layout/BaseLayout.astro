@@ -1,0 +1,79 @@
+---
+/**
+ * @component BaseLayout
+ * @description Layout base de todas as páginas públicas do portal Prefeitura LARP.
+ *
+ * Fornece a estrutura HTML completa:
+ * - `<head>` com metadados SEO, Open Graph e fontes.
+ * - Skip link para acessibilidade (WCAG).
+ * - Componente Header institucional unificado.
+ * - Elemento `<main id="main-content">` onde o conteúdo da página é injetado via `<slot />`.
+ * - Componente Footer institucional unificado.
+ */
+
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+import "@/styles/global.css";
+
+interface Props {
+  /** Título da página (será concatenado ao sufixo institucional). */
+  title: string;
+  /** Descrição da página para metatags de SEO. */
+  description?: string;
+  /** Imagem destacada para compartilhamento em redes sociais (Open Graph). */
+  image?: string;
+}
+
+const {
+  title,
+  description = "Portal Oficial da Prefeitura Municipal de LARP. Transparência, notícias e serviços ao cidadão.",
+  image = "/favicon.svg",
+} = Astro.props;
+
+const siteTitle = `${title} | Prefeitura Municipal de LARP`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "http://localhost:4321");
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Primário -->
+    <title>{siteTitle}</title>
+    <meta name="title" content={siteTitle} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Redes Sociais -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={siteTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <!-- Acessibilidade: Skip link para navegação por teclado -->
+    <a href="#main-content" class="skip-link">
+      Pular para o conteúdo principal
+    </a>
+
+    <Header />
+
+    <main id="main-content" class="flex-grow">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

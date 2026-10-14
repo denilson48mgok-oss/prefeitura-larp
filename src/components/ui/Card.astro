@@ -1,0 +1,55 @@
+---
+/**
+ * @component Card
+ * @description Container base para blocos de conteúdo.
+ *
+ * Usado como wrapper visual em cards de notícia, legislação e outros
+ * blocos de conteúdo. Aceita slot padrão para conteúdo arbitrário.
+ *
+ * Use `variant="interactive"` quando o card for clicável (ex: link para
+ * página de detalhe) — adiciona cursor pointer e animação de hover.
+ *
+ * @example
+ * ```astro
+ * <!-- Card simples -->
+ * <Card>
+ *   <p>Conteúdo aqui</p>
+ * </Card>
+ *
+ * <!-- Card clicável (renderiza como <a>) -->
+ * <Card variant="interactive" href="/noticias/minha-noticia">
+ *   <h2>Título</h2>
+ * </Card>
+ * ```
+ */
+
+interface Props {
+  /** "default": container estático. "interactive": hover animado + cursor pointer. */
+  variant?: "default" | "interactive";
+  /**
+   * URL de destino. Quando fornecido com variant="interactive",
+   * o card inteiro se torna um link semântico (`<a>`).
+   */
+  href?: string;
+  /** Classes CSS adicionais. */
+  class?: string;
+}
+
+const { variant = "default", href, class: className } = Astro.props;
+
+const classes = ["card", variant === "interactive" && "card--interactive", className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+{
+  href ? (
+    <a href={href} class={classes}>
+      <slot />
+    </a>
+  ) : (
+    <div class={classes}>
+      <slot />
+    </div>
+  )
+}

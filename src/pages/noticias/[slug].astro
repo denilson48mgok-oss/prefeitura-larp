@@ -1,0 +1,148 @@
+---
+/**
+ * @page Página Individual de Notícia (/noticias/[slug])
+ * @description Exibe a cobertura completa de uma matéria com suporte a Markdoc via Keystatic.
+ *
+ * Utiliza geração estática prévia (getStaticPaths) para performance instantânea (SSG),
+ * metadados estruturados para SEO e botões de retorno à listagem.
+ */
+
+import BaseLayout from "@/components/layout/BaseLayout.astro";
+import DocumentContent from "@/components/ui/DocumentContent";
+import Button from "@/components/ui/Button.astro";
+import { reader } from "@/lib/reader";
+import { formatarData } from "@/lib/utils";
+import { getNoticias } from "@/lib/content";
+
+export async function getStaticPaths() {
+  const todasNoticias = await reader.collections.noticias.all();
+
+  return todasNoticias.map((item) => ({
+    params: { slug: item.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const rawEntry = await reader.collections.noticias.read(slug!);
+
+if (!rawEntry) {
+  return Astro.redirect("/noticias");
+}
+
+const conteudo = await rawEntry.conteudo();
+const dataFormatada = formatarData(rawEntry.data, "longo");
+
+// Busca outras notícias para exibir sugestões no rodapé
+const todas = await getNoticias();
+const outrasNoticias = todas.filter((n) => n.slug !== slug).slice(0, 3);
+---
+
+<BaseLayout
+  title={rawEntry.titulo}
+  description={rawEntry.ementa}
+  image={rawEntry.foto ?? undefined}
+>
+  <article class="py-10">
+    <div class="container max-w-4xl space-y-8">
+      <!-- ──────────────────────────────────────────
+           NAVEGAÇÃO / BREADCRUMB
+      ────────────────────────────────────────── -->
+      <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2 flex-wrap">
+        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <span>&rsaquo;</span>
+        <a href="/noticias" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Notícias</a>
+        <span>&rsaquo;</span>
+        <span class="text-[var(--color-text)] font-semibold truncate max-w-xs">{rawEntry.titulo}</span>
+      </nav>
+
+      <!-- ──────────────────────────────────────────
+           CABEÇALHO DA MATÉRIA
+      ────────────────────────────────────────── -->
+      <header class="space-y-4 border-b border-[var(--color-border)] pb-6">
+        <div class="flex items-center gap-3 text-xs text-[var(--color-text-muted)] flex-wrap">
+          <span class="px-2.5 py-1 rounded-md bg-[var(--color-surface-2)] border border-[var(--color-border)] font-semibold text-[var(--color-primary-light)]">
+            Comunicação Oficial
+          </span>
+          <time datetime={rawEntry.data} class="flex items-center gap-1 font-medium">
+            📅 Publicado em {dataFormatada}
+          </time>
+        </div>
+
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[var(--color-text)] leading-tight">
+          {rawEntry.titulo}
+        </h1>
+
+        <!-- Ementa / Lead Editorial -->
+        <p class="sm:text-lg text-[var(--color-text-muted)] font-medium leading-relaxed bg-[var(--color-surface)] p-4 rounded-lg border-l-4 border-[var(--color-primary-DEFAULT)]">
+          {rawEntry.ementa}
+        </p>
+      </header>
+
+      <!-- ──────────────────────────────────────────
+           IMAGEM DE CAPA (OPCIONAL)
+      ────────────────────────────────────────── -->
+      {
+        rawEntry.foto && (
+          <figure class="rounded-xl overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface)]">
+            <img
+              src={rawEntry.foto}
+              alt={rawEntry.titulo}
+              class="w-full max-h-[460px] object-cover"
+            />
+            <figcaption class="p-3 text-xs text-[var(--color-muted)] text-center bg-[var(--color-surface-2)]">
+              Foto: Secretaria de Comunicação da Prefeitura LARP / Divulgação
+            </figcaption>
+          </figure>
+        )
+      }
+
+      <!-- ──────────────────────────────────────────
+           CORPO DA NOTÍCIA (MARKDOC RICH-TEXT)
+      ────────────────────────────────────────── -->
+      <section class="py-4">
+        <DocumentContent client:load document={conteudo} />
+      </section>
+
+      <!-- ──────────────────────────────────────────
+           AÇÕES & RODAPÉ DA MATÉRIA
+      ────────────────────────────────────────── -->
+      <footer class="pt-6 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <Button href="/noticias" variant="outline" size="sm">
+          &larr; Voltar para todas as notícias
+        </Button>
+
+        <span class="text-xs text-[var(--color-muted)]">
+          Prefeitura Municipal de LARP &bull; Todos os direitos reservados
+        </span>
+      </footer>
+
+      <!-- ──────────────────────────────────────────
+           OUTRAS NOTÍCIAS RECOMENDADAS
+      ────────────────────────────────────────── -->
+      {
+        outrasNoticias.length > 0 && (
+          <aside class="pt-10 border-t border-[var(--color-border)] space-y-4">
+            <h2 class="text-lg font-bold text-[var(--color-text)]">
+              Outras notícias da Prefeitura
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {outrasNoticias.map((item) => (
+                <a
+                  href={`/noticias/${item.slug}`}
+                  class="p-4 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary-DEFAULT)] transition-colors space-y-2 block"
+                >
+                  <span class="text-[10px] text-[var(--color-primary-DEFAULT)] font-bold">
+                    {item.data}
+                  </span>
+                  <h3 class="text-xs font-bold text-[var(--color-text)] line-clamp-2">
+                    {item.titulo}
+                  </h3>
+                </a>
+              ))}
+            </div>
+          </aside>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>

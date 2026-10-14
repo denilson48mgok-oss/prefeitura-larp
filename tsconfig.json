@@ -1,0 +1,18 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    // Alias para importações absolutas (ex: import { X } from "@/lib/utils")
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    // Garante compatibilidade com módulos ESM modernos
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    // Habilita suporte a JSX para o React (necessário para Keystatic)
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "include": ["src/**/*", "keystatic.config.ts", "astro.config.mjs"],
+  "exclude": ["node_modules", "dist"]
+}
