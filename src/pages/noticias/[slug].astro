@@ -48,9 +48,9 @@ const outrasNoticias = todas.filter((n) => n.slug !== slug).slice(0, 3);
            NAVEGAÇÃO / BREADCRUMB
       ────────────────────────────────────────── -->
       <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2 flex-wrap">
-        <a href="${base}" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <a href="/" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
         <span>&rsaquo;</span>
-        <a href="${base}noticias" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Notícias</a>
+        <a href="/noticias" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Notícias</a>
         <span>&rsaquo;</span>
         <span class="text-[var(--color-text)] font-semibold truncate max-w-xs">{rawEntry.titulo}</span>
       </nav>
@@ -107,7 +107,7 @@ const outrasNoticias = todas.filter((n) => n.slug !== slug).slice(0, 3);
            AÇÕES & RODAPÉ DA MATÉRIA
       ────────────────────────────────────────── -->
       <footer class="pt-6 border-t border-[var(--color-border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-        <Button href="${base}noticias" variant="outline" size="sm">
+        <Button href="/noticias" variant="outline" size="sm">
           &larr; Voltar para todas as notícias
         </Button>
 
