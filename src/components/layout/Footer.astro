@@ -17,11 +17,11 @@ const currentYear = new Date().getFullYear();
 const base = import.meta.env.BASE_URL; 
 /** Links rápidos — coluna central do footer. */
 const quickLinks: Array<{ label: string; href: string }> = [
-  { label: "Página Inicial",  href: "/"            },
-  { label: "Notícias",        href: "/noticias"    },
-  { label: "Portarias",       href: "/legislacao"  },
-  { label: "Decretos",        href: "/legislacao"  },
-  { label: "Leis Municipais", href: "/legislacao"  },
+  { label: "Página Inicial",  href: `${base}` },
+  { label: "Notícias",        href: `${base}noticias/` },
+  { label: "Portarias",       href: `${base}legislacao/` },
+  { label: "Decretos",        href: `${base}legislacao/` },
+  { label: "Leis Municipais", href: `${base}legislacao/` },
 ];
 
 /** Links de transparência — coluna direita do footer. */

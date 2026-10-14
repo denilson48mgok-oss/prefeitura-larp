@@ -22,7 +22,7 @@ const noticias = await getNoticias();
     <div class="container space-y-3">
       <!-- Breadcrumb de Navegação -->
       <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2">
-        <a href="${base}" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <a href={`${base}`} class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
         <span>&rsaquo;</span>
         <span class="text-[var(--color-text)] font-semibold">Notícias</span>
       </nav>

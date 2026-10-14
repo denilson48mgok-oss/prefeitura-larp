@@ -20,7 +20,7 @@ const { noticia } = Astro.props;
 const dataFormatada = formatarData(noticia.data, "longo");
 ---
 
-<Card variant="interactive" href={`/noticias/${noticia.slug}`} class="flex flex-col h-full group">
+<Card variant="interactive" href={`${base}noticias/${noticia.slug}`} class="flex flex-col h-full group">
   <!-- Imagem de Destaque / Fallback -->
   <div class="relative w-full h-48 bg-[var(--color-surface-2)] overflow-hidden border-b border-[var(--color-border)]">
     {

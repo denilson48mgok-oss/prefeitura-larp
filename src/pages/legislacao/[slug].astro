@@ -62,9 +62,9 @@ const atosRelacionados = todos
            BREADCRUMB DE NAVEGAÇÃO
       ────────────────────────────────────────── -->
       <nav aria-label="Breadcrumb" class="text-xs text-[var(--color-text-muted)] flex items-center gap-2 flex-wrap">
-        <a href="${base}" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
+        <a href={`${base}`} class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Início</a>
         <span>&rsaquo;</span>
-        <a href="${base}legislacao" class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Legislação</a>
+        <a href={`${base}legislacao`} class="hover:text-[var(--color-primary-DEFAULT)] transition-colors">Legislação</a>
         <span>&rsaquo;</span>
         <span class="text-[var(--color-text)] font-semibold">{labelTipo} nº {item.numero}</span>
       </nav>
@@ -151,7 +151,7 @@ const atosRelacionados = todos
            BOTÃO DE RETORNO
       ────────────────────────────────────────── -->
       <div class="flex items-center justify-between pt-4">
-        <Button href="${base}legislacao" variant="outline" size="sm">
+        <Button href={`${base}legislacao`} variant="outline" size="sm">
           &larr; Voltar ao repositório de legislação
         </Button>
       </div>
@@ -168,7 +168,7 @@ const atosRelacionados = todos
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {atosRelacionados.map((rel) => (
                 <a
-                  href={`/legislacao/${rel.slug}`}
+                  href={`${base}legislacao/${rel.slug}`}
                   class="p-4 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary-DEFAULT)] transition-colors space-y-2 block"
                 >
                   <span class="text-[10px] font-bold text-[var(--color-primary-DEFAULT)] font-mono">
